@@ -1,0 +1,100 @@
+---
+- name: Create the Python installation group
+  group:
+    name: "{{ group }}"
+  become: true
+
+- name: Create the Python installation owner
+  user:
+    name: "{{ user }}"
+    group: "{{ group }}"
+  become: true
+
+- name: Install dependencies
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gcc
+    - make
+    - bzip2-devel
+    - gdbm-devel
+    - libdb-devel
+    - libffi-devel
+    - ncurses-devel
+    - openssl-devel
+    - readline-devel
+    - sqlite-devel
+    - tcl-devel
+    - tk-devel
+  become: true
+
+- name: Download the source archive
+  get_url:
+    dest: "{{ build_dir }}"
+    group: "{{ group }}"
+    owner: "{{ user }}"
+    url: "https://www.python.org/ftp/python/{{ python_version }}/Python-{{ python_version }}.tar.xz"
+  become: true
+
+- name: Unpack the Python source archive
+  unarchive:
+    src: "{{ build_dir }}/Python-{{ python_version }}.tar.xz"
+    dest: "{{ build_dir }}"
+    group: "{{ group }}"
+    owner: "{{ user }}"
+    remote_src: true
+  become: true
+
+- name: Run ./configure
+  command: "./configure --prefix={{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
+  args:
+    chdir: "{{ build_dir }}/Python-{{ python_version }}"
+  creates: "{{ build_dir }}/Python-{{ python_version }}/configure.log"
+  become: true
+  become_user: "{{ user }}"
+
+- name: Run make
+  make:
+    chdir: "{{ build_dir }}/Python-{{ python_version }}"
+  become: true
+  become_user: "{{ user }}"
+
+- name: Run make install
+  make:
+    chdir: "{{ build_dir }}/Python-{{ python_version }}"
+    target: install
+  become: true
+
+- name: Set permissions
+  file:
+    path: "{{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
+    owner: "{{ user }}"
+    group: "{{ group }}"
+    recurse: true
+  become: true
+
+- name: Update pip and setuptools
+  pip:
+    name: "{{ item }}"
+    executable: "{{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}/bin/pip{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
+    # state: latest
+    state: present
+  with_items:
+    - pip
+    - setuptools
+  become: true
+  become_user: "{ user }}"
+
+- name: Install standard packages
+  pip:
+    name: "{{ item }}"
+    executable: "{{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}/bin/pip{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
+    # state: latest
+    state: present
+  with_items:
+    - virtualenv
+    - ipython
+    - wheel
+  become: true
+  become_user: "{ user }}"
