@@ -50,7 +50,7 @@
   command: "./configure --prefix={{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
   args:
     chdir: "{{ build_dir }}/Python-{{ python_version }}"
-  creates: "{{ build_dir }}/Python-{{ python_version }}/configure.log"
+    creates: "{{ build_dir }}/Python-{{ python_version }}/configure.log"
   become: true
   become_user: "{{ user }}"
 
@@ -84,7 +84,7 @@
     - pip
     - setuptools
   become: true
-  become_user: "{ user }}"
+  become_user: "{{ user }}"
 
 - name: Install standard packages
   pip:
@@ -97,4 +97,4 @@
     - ipython
     - wheel
   become: true
-  become_user: "{ user }}"
+  become_user: "{{ user }}"
