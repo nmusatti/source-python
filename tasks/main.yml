@@ -46,25 +46,33 @@
     remote_src: true
   become: true
 
+- name: Check configure hasn't run
+  stat:
+    path: "{{ build_dir }}/Python-{{ python_version }}/config.log"
+  register: stat_result
+
 - name: Run ./configure
-  command: "./configure --prefix={{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
-  args:
-    chdir: "{{ build_dir }}/Python-{{ python_version }}"
-    creates: "{{ build_dir }}/Python-{{ python_version }}/configure.log"
+  command: ./configure --prefix={{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }} chdir={{ build_dir }}/Python-{{ python_version }}
   become: true
   become_user: "{{ user }}"
+  register: configure_result
+  when: not stat_result.stat.exists
 
 - name: Run make
   make:
     chdir: "{{ build_dir }}/Python-{{ python_version }}"
   become: true
   become_user: "{{ user }}"
+  register: make_result
+  when: configure_result is not skipped
 
 - name: Run make install
   make:
     chdir: "{{ build_dir }}/Python-{{ python_version }}"
     target: install
   become: true
+  register: install_result
+  when: make_result is not skipped
 
 - name: Set permissions
   file:
@@ -73,18 +81,19 @@
     group: "{{ group }}"
     recurse: true
   become: true
+  when: install_result is not skipped
 
-- name: Update pip and setuptools
-  pip:
-    name: "{{ item }}"
-    executable: "{{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}/bin/pip{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
-    # state: latest
-    state: present
-  with_items:
-    - pip
-    - setuptools
-  become: true
-  become_user: "{{ user }}"
+# - name: Update pip and setuptools
+#   pip:
+#     name: "{{ item }}"
+#     executable: "{{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}/bin/pip{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
+#     # state: latest
+#     state: present
+#   with_items:
+#     - pip
+#     - setuptools
+#   become: true
+#   become_user: "{{ user }}"
 
 - name: Install standard packages
   pip:
