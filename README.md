@@ -1,38 +1,47 @@
-Role Name
-=========
+source_python
+=============
 
-A brief description of the role goes here.
+Download and install Python from source.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None. This role installs all the required system packages.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+python_version: the version of Python to be installed, in x.y.z form. The default is "3.7.0"
+build_dir: the directory in which the Python source will be downloaded and build. The default is "/tmp"
+install_dir: the base of the directory in which Python will be installed. The default is "/opt"
+user: the user that will own the installation. The default is "python"
+group: the installation owner's primary group. The default is "python"
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+This role can be used as follows:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+- name: install Python
+  hosts: all
+  tasks:
+  - include_role:
+       name: source_python
+    vars:
+      python_version: "3.7.0"
 
 License
 -------
 
-BSD
+GPLv3
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Nicola Musatti
+nicola.musatti@gmail.com
