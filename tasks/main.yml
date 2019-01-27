@@ -69,7 +69,7 @@
 
 - name: Check configure hasn't run
   stat:
-    path: "{{ python_src_dir }}/Python-{{ python_minor }}/config.log"
+    path: "{{ python_src_dir }}/Python-{{ python_release }}/config.log"
   register: configure_stat_result
 
 - name: Run ./configure
