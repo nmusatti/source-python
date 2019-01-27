@@ -1,4 +1,4 @@
-Ansible role: source_python
+Ansible role: source-python
 ===========================
 
 [![Build Status](https://travis-ci.org/nmusatti/source-python.svg?branch=master)](https://travis-ci.org/nmusatti/source-python)
