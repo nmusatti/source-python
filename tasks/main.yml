@@ -1,74 +1,97 @@
 ---
 - name: Create the Python installation group
   group:
-    name: "{{ group }}"
+    name: "{{ python_group }}"
   become: true
 
 - name: Create the Python installation owner
   user:
-    name: "{{ user }}"
-    group: "{{ group }}"
+    name: "{{ python_user }}"
+    group: "{{ python_group }}"
   become: true
 
 - name: Install dependencies
   yum:
-    name: "{{ item }}"
+    name:
+      - bzip2-devel
+      - gcc
+      - gdbm-devel
+      - libdb
+      - libdb-devel
+      - libffi-devel
+      - make
+      - ncurses
+      - ncurses-devel
+      - ncurses-libs
+      - openssl-devel
+      - readline-devel
+      - sqlite-devel
+      - tcl-devel
+      - tk-devel
     state: present
-  with_items:
-    - gcc
-    - make
-    - bzip2-devel
-    - gdbm-devel
-    - libdb-devel
-    - libffi-devel
-    - ncurses-devel
-    - openssl-devel
-    - readline-devel
-    - sqlite-devel
-    - tcl-devel
-    - tk-devel
   become: true
+  retries: 3
+  delay: 3
+
+- name: Create source directory
+  file:
+    group: "{{ python_group }}"
+    mode: 0755
+    owner: "{{ python_user }}"
+    path: "{{ python_src_dir }}"
+    state: directory
+  become: true
+
+- name: Check the archive isn't already available
+  stat:
+    path: "{{ python_src_dir }}/{{ python_archive }}"
+  register: archive_stat_result
 
 - name: Download the source archive
   get_url:
-    dest: "{{ build_dir }}"
-    group: "{{ group }}"
-    owner: "{{ user }}"
-    url: "https://www.python.org/ftp/python/{{ python_version }}/Python-{{ python_version }}.tar.xz"
+    dest: "{{ python_src_dir }}"
+    group: "{{ python_group }}"
+    owner: "{{ python_user }}"
+    url: "{{ python_url }}"
   become: true
+  retries: 3
+  delay: 3
+  when: not archive_stat_result.stat.exists
 
 - name: Unpack the Python source archive
   unarchive:
-    src: "{{ build_dir }}/Python-{{ python_version }}.tar.xz"
-    dest: "{{ build_dir }}"
-    group: "{{ group }}"
-    owner: "{{ user }}"
+    src: "{{ python_src_dir }}/{{ python_archive }}"
+    dest: "{{ python_src_dir }}"
+    group: "{{ python_group }}"
+    owner: "{{ python_user }}"
     remote_src: true
   become: true
 
 - name: Check configure hasn't run
   stat:
-    path: "{{ build_dir }}/Python-{{ python_version }}/config.log"
-  register: stat_result
+    path: "{{ python_src_dir }}/Python-{{ python_minor }}/config.log"
+  register: configure_stat_result
 
 - name: Run ./configure
-  command: ./configure --prefix={{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }} chdir={{ build_dir }}/Python-{{ python_version }}
+  command: >
+    ./configure --prefix={{ python_install_dir }}/Python-{{
+    python_minor }} chdir={{ python_src_dir }}/Python-{{ python_release }}
   become: true
-  become_user: "{{ user }}"
+  become_user: "{{ python_user }}"
   register: configure_result
-  when: not stat_result.stat.exists
+  when: not configure_stat_result.stat.exists
 
 - name: Run make
   make:
-    chdir: "{{ build_dir }}/Python-{{ python_version }}"
+    chdir: "{{ python_src_dir }}/Python-{{ python_release }}"
   become: true
-  become_user: "{{ user }}"
+  become_user: "{{ python_user }}"
   register: make_result
   when: configure_result is not skipped
 
 - name: Run make install
   make:
-    chdir: "{{ build_dir }}/Python-{{ python_version }}"
+    chdir: "{{ python_src_dir }}/Python-{{ python_release }}"
     target: install
   become: true
   register: install_result
@@ -76,9 +99,9 @@
 
 - name: Set permissions
   file:
-    path: "{{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
-    owner: "{{ user }}"
-    group: "{{ group }}"
+    path: "{{ python_install_dir }}/Python-{{ python_minor }}"
+    owner: "{{ python_user }}"
+    group: "{{ python_group }}"
     recurse: true
   become: true
   when: install_result is not skipped
@@ -86,24 +109,24 @@
 # - name: Update pip and setuptools
 #   pip:
 #     name: "{{ item }}"
-#     executable: "{{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}/bin/pip{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
+#     executable: "{{ install_dir }}/Python-{{ python_release.split('.')[0] }}.{{ python_release.split('.')[1] }}/bin/pip{{ python_release.split('.')[0] }}.{{ python_release.split('.')[1] }}"
 #     # state: latest
 #     state: present
 #   with_items:
 #     - pip
 #     - setuptools
 #   become: true
-#   become_user: "{{ user }}"
+#   become_user: "{{ python_user }}"
 
-- name: Install standard packages
-  pip:
-    name: "{{ item }}"
-    executable: "{{ install_dir }}/Python-{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}/bin/pip{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
-    # state: latest
-    state: present
-  with_items:
-    - virtualenv
-    - ipython
-    - wheel
-  become: true
-  become_user: "{{ user }}"
+# - name: Install standard packages
+#   pip:
+#     name: "{{ item }}"
+#     executable: "{{ install_dir }}/Python-{{ python_release.split('.')[0] }}.{{ python_release.split('.')[1] }}/bin/pip{{ python_release.split('.')[0] }}.{{ python_release.split('.')[1] }}"
+#     # state: latest
+#     state: present
+#   with_items:
+#     - virtualenv
+#     - ipython
+#     - wheel
+#   become: true
+#   become_user: "{{ python_user }}"

@@ -1,6 +1,11 @@
 ---
-python_version: 3.7.0
-build_dir: /tmp
-install_dir: /opt
-user: python
-group: python
+python_group: python
+python_user: python
+python_src_dir: /sw/python
+python_release: 3.7.1
+python_minor: "{{ python_release.split('.')[0] }}.{{
+python_release.split('.')[1] }}"
+python_archive: Python-{{ python_release }}.tar.xz
+python_url: "https://www.python.org/ftp/python/{{ python_release }}/{{
+python_archive }}"
+python_install_dir: /opt
