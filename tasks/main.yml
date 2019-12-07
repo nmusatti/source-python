@@ -19,6 +19,7 @@
       - libdb
       - libdb-devel
       - libffi-devel
+      - libuuid-devel
       - make
       - ncurses
       - ncurses-devel
@@ -28,6 +29,7 @@
       - sqlite-devel
       - tcl-devel
       - tk-devel
+      - xz-devel
     state: present
   become: true
   retries: 3
