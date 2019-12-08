@@ -46,9 +46,11 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - role: nmusatti.source-python
+         - role: nmusatti.source_python
            vars:
              python_release: 3.7.1
+
+Note the underscore in the name. Ansible Galaxy did not accept my submission otherwise.
 
 License
 -------
