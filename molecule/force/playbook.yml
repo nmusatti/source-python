@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: source-python
+  vars:
+    python_version: 3.7.0
+  tasks:
+    - include_role:
+        name: source-python
+      vars:
+        python_version: 3.7.1
+        python_force: true

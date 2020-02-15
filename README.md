@@ -36,6 +36,11 @@ The installation group.
 
 The directory where the source archive is downloaded, extracted and built.
 
+    python_force: false
+
+When `true` installation is performed even if a bug fix release of the same minor version was already installed.
+Useful to repeat installations after something went wrong or to perform upgrades.
+
 Dependencies
 ------------
 

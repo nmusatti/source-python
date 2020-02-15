@@ -37,6 +37,13 @@
   retries: 3
   delay: 3
 
+- name: Delete source directory
+  file:
+    path: "{{ python_src_dir }}"
+    state: absent
+  become: true
+  when: python_force
+
 - name: Create source directory
   file:
     group: "{{ python_group }}"
@@ -45,6 +52,13 @@
     path: "{{ python_src_dir }}"
     state: directory
   become: true
+
+- name: Remove the archive
+  file:
+    path: "{{ python_src_dir }}/{{ python_archive }}"
+    state: absent
+  become: true
+  when: python_force
 
 - name: Check the archive isn't already available
   stat:
@@ -93,6 +107,13 @@
   register: make_result
   when: configure_result is not skipped
 
+- name: Delete installation directory
+  file:
+    path: "{{ python_install_dir }}/Python-{{ python_minor }}"
+    state: absent
+  become: true
+  when: python_force and make_result is not skipped
+
 - name: Run make install
   make:
     chdir: "{{ python_src_dir }}/Python-{{ python_release }}"
@@ -109,28 +130,3 @@
     recurse: true
   become: true
   when: install_result is not skipped
-
-# - name: Update pip and setuptools
-#   pip:
-#     name: "{{ item }}"
-#     executable: "{{ install_dir }}/Python-{{ python_release.split('.')[0] }}.{{ python_release.split('.')[1] }}/bin/pip{{ python_release.split('.')[0] }}.{{ python_release.split('.')[1] }}"
-#     # state: latest
-#     state: present
-#   with_items:
-#     - pip
-#     - setuptools
-#   become: true
-#   become_user: "{{ python_user }}"
-
-# - name: Install standard packages
-#   pip:
-#     name: "{{ item }}"
-#     executable: "{{ install_dir }}/Python-{{ python_release.split('.')[0] }}.{{ python_release.split('.')[1] }}/bin/pip{{ python_release.split('.')[0] }}.{{ python_release.split('.')[1] }}"
-#     # state: latest
-#     state: present
-#   with_items:
-#     - virtualenv
-#     - ipython
-#     - wheel
-#   become: true
-#   become_user: "{{ python_user }}"
