@@ -27,8 +27,10 @@
       - openssl-devel
       - readline-devel
       - sqlite-devel
+      - tar
       - tcl-devel
       - tk-devel
+      - xz
       - xz-devel
     state: present
   become: true
