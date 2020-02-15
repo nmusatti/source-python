@@ -1,2 +1,5 @@
 ---
-# vars file for source_python
+python_minor: "{{ python_release.split('.')[0] }}.{{ python_release.split('.')[1] }}"
+python_archive: Python-{{ python_release }}.tar.xz
+python_url: "https://www.python.org/ftp/python/{{ python_release }}/{{ python_archive }}"
+python_force: false
