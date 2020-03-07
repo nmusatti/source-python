@@ -15,9 +15,9 @@ platforms:
   - name: centos8
     image: docker.io/pycontribs/centos:8
     pre_build_image: true
-  - name: fedora
-    image: docker.io/pycontribs/fedora
-    pre_build_image: true
+  # - name: fedora
+  #   image: docker.io/pycontribs/fedora
+  #   pre_build_image: true
 provisioner:
   name: ansible
 verifier:
