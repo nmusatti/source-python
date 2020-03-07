@@ -40,7 +40,8 @@ The directory where the source archive is downloaded, extracted and built.
     python_force: false
 
 When `true` installation is performed even if a bug fix release of the same minor version was already installed.
-Useful to repeat installations after something went wrong or to perform upgrades.
+Useful to repeat installations after something went wrong or to perform upgrades. Note that setting `python_force`
+to `true` breaks the role's idempotence.
 
 Dependencies
 ------------
