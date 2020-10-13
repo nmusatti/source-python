@@ -21,7 +21,7 @@ The variables that control the role behaviour are listed below with their respec
 
 The base directory of the installation
 
-    python_release: 3.8.1
+    python_release: 3.9.0
 
 The version of Python to be installed, in x.y.z form.
 
@@ -55,7 +55,7 @@ Example Playbook
       roles:
          - role: nmusatti.source_python
            vars:
-             python_release: 3.8.1
+             python_release: 3.9.0
 
 Note the underscore in the name. Ansible Galaxy did not accept my submission otherwise.
 
