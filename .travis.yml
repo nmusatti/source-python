@@ -9,7 +9,7 @@ services:
 before_install:
   - sudo apt-get -qq update
 install:
-  - pip install molecule[docker] ansible-lint flake8 testinfra docker
+  - pip install molecule[docker] "ansible<2.10" ansible-lint flake8 testinfra
   # - pip install docker-py
 script:
   - molecule test
