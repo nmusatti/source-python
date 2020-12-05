@@ -1,9 +1,9 @@
 ---
 sudo: required
-dist: xenial
+dist: focal
 language: python
 python:
-  - "2.7"
+  - "3.6"
 services:
   - docker
 before_install:
