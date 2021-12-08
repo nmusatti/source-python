@@ -1,5 +1,7 @@
 ---
 galaxy_info:
+  role_name: source_python
+  namespace: nmusatti
   author: Nicola Musatti
   description: Install Python from source
   license: license (GPLv3)
