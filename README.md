@@ -1,7 +1,7 @@
 Ansible role: source-python
 ===========================
 
-[![Build Status](https://travis-ci.org/nmusatti/source-python.svg?branch=master)](https://travis-ci.org/nmusatti/source-python)
+![build](https://github.com/nmusatti/source-python/actions/workflows/test.yml/badge.svg)
 
 An Ansible role to download and install Python from source. Currently only Red Hat distributions are supported,
 i.e. CentOS 7, CentOS 8 and Fedora.
