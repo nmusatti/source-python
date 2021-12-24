@@ -10,7 +10,7 @@
     group: "{{ python_group }}"
   become: true
 
-- name: Install dependencies
+- name: Install dependencies (RedHat distros)
   yum:
     name:
       - bzip2-devel
@@ -36,6 +36,31 @@
   become: true
   retries: 3
   delay: 3
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Install dependencies (Ubuntu)
+  apt:
+    name:
+      - libbz2-dev
+      - gcc
+      - libgdbm-dev
+      - libdb-dev
+      - libffi-dev
+      - uuid-dev
+      - make
+      - libncurses-dev
+      - libssl-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - tar
+      - tcl-dev
+      - tk-dev
+      - libxv-dev
+    state: present
+  become: true
+  retries: 3
+  delay: 3
+  when: ansible_facts['distribution'] == "Ubuntu"
 
 - name: Delete source directory
   file:
