@@ -2,5 +2,5 @@
 python_group: python
 python_user: python
 python_src_dir: /sw/python
-python_release: 3.9.0
+python_release: 3.10.0
 python_install_dir: /opt
