@@ -3,8 +3,9 @@ Ansible role: source-python
 
 ![test](https://github.com/nmusatti/source-python/actions/workflows/test.yml/badge.svg)
 
-An Ansible role to download and install Python from source. Currently only Red Hat distributions are supported,
-i.e. CentOS 7, CentOS 8 and Fedora.
+An Ansible role to download and install Python from source. Currently supported
+distributions are the Red Hat ones and their derivatives, such as CentOS 7,
+Rocky Linux 8 and Fedora, and the latest Ubuntu LTS, 20.04.
 
 
 Requirements
@@ -21,7 +22,7 @@ The variables that control the role behaviour are listed below with their respec
 
 The base directory of the installation
 
-    python_release: 3.9.0
+    python_release: 3.10.0
 
 The version of Python to be installed, in x.y.z form.
 
@@ -55,7 +56,7 @@ Example Playbook
       roles:
          - role: nmusatti.source_python
            vars:
-             python_release: 3.9.0
+             python_release: 3.10.0
 
 Note the underscore in the name. Ansible Galaxy did not accept my submission otherwise.
 
