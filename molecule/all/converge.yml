@@ -1,0 +1,18 @@
+---
+- name: Converge
+  hosts: all
+
+  tasks:
+
+    - name: Run the source_python role
+      include_role:
+        name: nmusatti.source_python
+      vars:
+        python_release: "{{ item }}"
+      loop:
+        - 3.10.1
+        - 3.9.9
+        - 3.8.12
+        - 3.7.12
+        - 3.6.15
+        - 2.7.18

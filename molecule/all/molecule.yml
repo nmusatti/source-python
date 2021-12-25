@@ -1,0 +1,18 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
+platforms:
+  - name: $TOX_ENVNAME
+    image: nmusatti/${TOX_ENVNAME}-pys
+    pre_build_image: true
+provisioner:
+  name: ansible
+verifier:
+  name: testinfra
