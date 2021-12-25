@@ -13,7 +13,10 @@ galaxy_info:
         - 8
     - name: Fedora
       versions:
-        - all
+        - 35
+    - name: Ubuntu
+      versions:
+        - 20.04
   galaxy_tags:
     - development
     - packaging
