@@ -11,8 +11,9 @@ jobs:
       matrix:
         platform:
           - centos7
-          - centos8
+          - rockylinux8
           - fedora35
+          - ubuntu2004
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
