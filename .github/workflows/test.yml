@@ -10,9 +10,11 @@ jobs:
     strategy:
       matrix:
         platform:
-          - centos7
           - rockylinux8
+          - centos7
           - fedora35
+          - fedora34
+          - ubuntu2004
           - ubuntu2004
     steps:
       - uses: actions/checkout@v2

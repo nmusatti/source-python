@@ -14,9 +14,11 @@ galaxy_info:
     - name: Fedora
       versions:
         - 35
+        - 34
     - name: Ubuntu
       versions:
         - focal
+        - bionic
   galaxy_tags:
     - development
     - packaging
