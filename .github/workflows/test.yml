@@ -15,7 +15,7 @@ jobs:
           - fedora35
           - fedora34
           - ubuntu2004
-          - ubuntu2004
+          - ubuntu1804
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
