@@ -1,17 +1,17 @@
 ---
 - name: Create the Python installation group
-  group:
+  ansible.builtin.group:
     name: "{{ python_group }}"
   become: true
 
 - name: Create the Python installation owner
-  user:
+  ansible.builtin.user:
     name: "{{ python_user }}"
     group: "{{ python_group }}"
   become: true
 
 - name: Install dependencies (RedHat distros)
-  yum:
+  ansible.builtin.yum:
     name:
       - bzip2-devel
       - gcc
@@ -39,7 +39,7 @@
   when: ansible_facts['os_family'] == "RedHat"
 
 - name: Install dependencies (Ubuntu)
-  apt:
+  ansible.builtin.apt:
     name:
       - libbz2-dev
       - gcc
@@ -64,14 +64,14 @@
   when: ansible_facts['distribution'] == "Ubuntu"
 
 - name: Delete source directory
-  file:
+  ansible.builtin.file:
     path: "{{ python_src_dir }}"
     state: absent
   become: true
   when: python_force
 
 - name: Create source directory
-  file:
+  ansible.builtin.file:
     group: "{{ python_group }}"
     mode: 0755
     owner: "{{ python_user }}"
@@ -80,30 +80,31 @@
   become: true
 
 - name: Remove the archive
-  file:
+  ansible.builtin.file:
     path: "{{ python_src_dir }}/{{ python_archive }}"
     state: absent
   become: true
   when: python_force
 
 - name: Check the archive isn't already available
-  stat:
+  ansible.builtin.stat:
     path: "{{ python_src_dir }}/{{ python_archive }}"
   register: archive_stat_result
 
 - name: Download the source archive
-  get_url:
+  ansible.builtin.get_url:
     dest: "{{ python_src_dir }}"
     group: "{{ python_group }}"
     owner: "{{ python_user }}"
     url: "{{ python_url }}"
+    mode: 0644
   become: true
   retries: 3
   delay: 3
   when: not archive_stat_result.stat.exists
 
 - name: Unpack the Python source archive
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ python_src_dir }}/{{ python_archive }}"
     dest: "{{ python_src_dir }}"
     group: "{{ python_group }}"
@@ -113,12 +114,12 @@
   become: true
 
 - name: Check configure hasn't run
-  stat:
+  ansible.builtin.stat:
     path: "{{ python_src_dir }}/Python-{{ python_release }}/config.log"
   register: configure_stat_result
 
 - name: Run ./configure
-  command: >
+  ansible.builtin.command: >
     ./configure --prefix={{ python_install_dir }}/Python-{{
     python_minor }} chdir={{ python_src_dir }}/Python-{{ python_release }}
   become: true
@@ -127,7 +128,7 @@
   when: not configure_stat_result.stat.exists
 
 - name: Run make
-  make:
+  ansible.builtin.make:
     chdir: "{{ python_src_dir }}/Python-{{ python_release }}"
   become: true
   become_user: "{{ python_user }}"
@@ -135,14 +136,14 @@
   when: configure_result is not skipped
 
 - name: Delete installation directory
-  file:
+  ansible.builtin.file:
     path: "{{ python_install_dir }}/Python-{{ python_minor }}"
     state: absent
   become: true
   when: python_force and make_result is not skipped
 
 - name: Run make install
-  make:
+  ansible.builtin.make:
     chdir: "{{ python_src_dir }}/Python-{{ python_release }}"
     target: install
   become: true
@@ -150,7 +151,7 @@
   when: make_result is not skipped
 
 - name: Set permissions
-  file:
+  ansible.builtin.file:
     path: "{{ python_install_dir }}/Python-{{ python_minor }}"
     owner: "{{ python_user }}"
     group: "{{ python_group }}"

@@ -7,7 +7,7 @@
         python_release: 3.7.0
   tasks:
     - name: Include role
-      include_role:
+      ansible.builtin.include_role:
         name: nmusatti.source_python
       vars:
         python_release: 3.7.1
