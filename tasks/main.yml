@@ -10,7 +10,7 @@
     group: "{{ python_group }}"
   become: true
 
-- name: Install dependencies (RedHat distros)
+- name: Install dependencies (RedHat distros except EL 9)
   ansible.builtin.yum:
     name:
       - bzip2-devel
@@ -36,7 +36,35 @@
   become: true
   retries: 3
   delay: 3
-  when: ansible_facts['os_family'] == "RedHat"
+  when: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] != '9'
+
+- name: Install dependencies (RedHat EL 9)
+  ansible.builtin.yum:
+    name:
+      - bzip2-devel
+      - gcc
+      # - gdbm-devel
+      - libdb
+      - libdb-devel
+      - libffi-devel
+      - libuuid-devel
+      - make
+      - ncurses
+      - ncurses-devel
+      - ncurses-libs
+      - openssl-devel
+      - readline-devel
+      - sqlite-devel
+      - tar
+      - tcl-devel
+      - tk-devel
+      - xz
+      - xz-devel
+    state: present
+  become: true
+  retries: 3
+  delay: 3
+  when: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] == '9'
 
 - name: Install dependencies (Ubuntu)
   ansible.builtin.apt:
