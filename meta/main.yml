@@ -5,7 +5,7 @@ galaxy_info:
   author: Nicola Musatti
   description: Install Python from source
   license: license (GPLv3)
-  min_ansible_version: "2.4"
+  min_ansible_version: "2.9"
   platforms:
     - name: EL
       versions:
