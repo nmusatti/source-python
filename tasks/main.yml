@@ -156,7 +156,7 @@
   when: not configure_stat_result.stat.exists
 
 - name: Run make
-  ansible.builtin.make:
+  community.general.system.make:
     chdir: "{{ python_src_dir }}/Python-{{ python_release }}"
   become: true
   become_user: "{{ python_user }}"
@@ -171,7 +171,7 @@
   when: python_force and make_result is not skipped
 
 - name: Run make install
-  ansible.builtin.make:
+  community.general.system.make:
     chdir: "{{ python_src_dir }}/Python-{{ python_release }}"
     target: install
   become: true
