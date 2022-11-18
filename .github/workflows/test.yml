@@ -17,6 +17,7 @@ jobs:
           - centos7
           - centos-stream9
           - centos-stream8
+          - fedora37
           - fedora36
           - fedora35
           - ubuntu2204
