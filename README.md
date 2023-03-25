@@ -1,7 +1,7 @@
 Ansible role: source-python
 ===========================
 
-This fork contains a fix for CentOS 7 to install python 3.9 
+![test](https://github.com/nmusatti/source-python/actions/workflows/test.yml/badge.svg)
 
 An Ansible role to download and install Python from source. Supported
 distributions are the currently maintained releases of the Red Hat family and
