@@ -152,7 +152,7 @@
     path: "{{ python_src_dir }}/Python-{{ python_release }}/configure"
     regexp: 'PKG_CONFIG openssl '
     replace: 'PKG_CONFIG openssl11 '
-    when: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] != '9'
+  when: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] != '9'
 
 - name: Run ./configure
   ansible.builtin.command: >
