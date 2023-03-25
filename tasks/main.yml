@@ -25,6 +25,7 @@
       - ncurses-devel
       - ncurses-libs
       - openssl-devel
+      - openssl11-devel
       - readline-devel
       - sqlite-devel
       - tar
@@ -145,6 +146,13 @@
   ansible.builtin.stat:
     path: "{{ python_src_dir }}/Python-{{ python_release }}/config.log"
   register: configure_stat_result
+  
+- name: Use openssl11 to fix pip error
+  ansible.builtin.replace:
+    path: "{{ python_src_dir }}/Python-{{ python_release }}/configure"
+    regexp: 'PKG_CONFIG openssl '
+    replace: 'PKG_CONFIG openssl11 '
+    when: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] != '9'
 
 - name: Run ./configure
   ansible.builtin.command: >
