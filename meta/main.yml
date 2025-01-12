@@ -5,22 +5,22 @@ galaxy_info:
   author: Nicola Musatti
   description: Install Python from source
   license: license (GPLv3)
-  min_ansible_version: "2.9"
+  min_ansible_version: "2.17"
   platforms:
     - name: EL
       versions:
         - "9"
         - "8"
-        - "7"
     - name: Fedora
       versions:
-        - "36"
-        - "35"
+        - "41"
+        - "40"
+        - "39"
     - name: Ubuntu
       versions:
+        - noble
         - jammy
         - focal
-        - bionic
   galaxy_tags:
     - development
     - packaging
