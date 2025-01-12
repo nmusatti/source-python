@@ -16,10 +16,10 @@ def test_hosts_file(host):
 
 
 def test_python(host):
-    f = host.file('/opt/Python-3.10/bin/python3.10')
+    f = host.file('/opt/Python-3.13/bin/python3.13')
     assert f.exists
     assert f.user == 'python'
     assert f.group == 'python'
 
-    assert '3.10.0' in host.check_output(
-        '/opt/Python-3.10/bin/python3.10 --version')
+    assert '3.13.0' in host.check_output(
+        '/opt/Python-3.13/bin/python3.13 --version')
