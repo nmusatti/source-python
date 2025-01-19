@@ -5,7 +5,7 @@ Ansible role: source-python
 
 An Ansible role to download and install Python from source. Supported
 distributions are the currently maintained releases of the Red Hat family and
-derivatives, and Ubuntu. At this time tests are run on Rocky Linux 9, 
+derivatives, and Ubuntu LTS. At this time tests are run on Rocky Linux 9, 
 CentOS Stream 10, CentOS Stream 9, Fedora 41, Fedora 40, Fedora 39,
 Ubuntu 24.04, Ubuntu 22.04 and Ubuntu 20.04.
 
@@ -60,7 +60,7 @@ Example Playbook
            vars:
              python_release: 3.13.0
 
-Note the underscore in the name. Ansible Galaxy did not accept my submission otherwise.
+Note the underscore in the name.
 
 License
 -------
