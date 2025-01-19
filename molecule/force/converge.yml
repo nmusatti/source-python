@@ -4,11 +4,11 @@
   roles:
     - role: nmusatti.source_python
       vars:
-        python_release: 3.7.0
+        python_release: 3.13.0
   tasks:
     - name: Include role
       ansible.builtin.include_role:
         name: nmusatti.source_python
       vars:
-        python_release: 3.7.1
+        python_release: 3.13.1
         python_force: true
