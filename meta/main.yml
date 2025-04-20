@@ -20,7 +20,6 @@ galaxy_info:
       versions:
         - noble
         - jammy
-        - focal
   galaxy_tags:
     - development
     - packaging
