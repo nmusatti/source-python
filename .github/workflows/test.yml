@@ -12,12 +12,13 @@ jobs:
     strategy:
       matrix:
         platform:
+          - rockylinux10
           - rockylinux9
           - centos-stream10
           - centos-stream9
+          - fedora43
           - fedora42
           - fedora41
-          - fedora40
           - ubuntu2404
           - ubuntu2204
     steps:
